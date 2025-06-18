@@ -7,11 +7,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Briefcase,
-  Target
+  Target,
+  AlertCircle
 } from 'lucide-react';
 import { Job } from './types/Job';
-import { mockJobs } from './data/mockJobs';
-import { calculatePriority } from './utils/jobUtils';
+import { useJobs } from './hooks/useJobs';
 import Dashboard from './components/Dashboard';
 import JobCard from './components/JobCard';
 import JobList from './components/JobList';
@@ -20,53 +20,43 @@ import Suggestions from './components/Suggestions';
 type View = 'dashboard' | 'jobs' | 'current' | 'suggestions';
 
 function App() {
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const { jobs, loading, error, updateJobStatus, addJobNote } = useJobs();
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
 
   useEffect(() => {
-    const jobsWithPriorities = mockJobs.map(job => ({
-      ...job,
-      priority: calculatePriority(job)
-    }));
-    setJobs(jobsWithPriorities);
-
-    const highPriorityJob = jobsWithPriorities.find(j => j.priority === 'high');
-    if (highPriorityJob) {
-      setSelectedJob(highPriorityJob);
-      setCurrentJobIndex(jobsWithPriorities.findIndex(j => j.id === highPriorityJob.id));
-    } else if (jobsWithPriorities.length > 0) {
-      setSelectedJob(jobsWithPriorities[0]);
-      setCurrentJobIndex(0);
+    if (jobs.length > 0 && !selectedJob) {
+      const highPriorityJob = jobs.find(j => j.priority === 'high');
+      if (highPriorityJob) {
+        setSelectedJob(highPriorityJob);
+        setCurrentJobIndex(jobs.findIndex(j => j.id === highPriorityJob.id));
+      } else {
+        setSelectedJob(jobs[0]);
+        setCurrentJobIndex(0);
+      }
     }
-  }, []);
+  }, [jobs, selectedJob]);
 
-  const handleStatusChange = (jobId: string, status: Job['status']) => {
-    setJobs(prevJobs =>
-      prevJobs.map(job =>
-        job.id === jobId
-          ? { ...job, status, applicationDate: status === 'applied' ? new Date().toISOString() : job.applicationDate }
-          : job
-      )
-    );
-
-    if (selectedJob?.id === jobId) {
-      setSelectedJob(prev => prev ? { ...prev, status } : null);
+  const handleStatusChange = async (jobId: string, status: Job['status']) => {
+    try {
+      const updatedJob = await updateJobStatus(jobId, status);
+      if (selectedJob?.id === jobId) {
+        setSelectedJob(updatedJob);
+      }
+    } catch (err) {
+      console.error('Failed to update job status:', err);
     }
   };
 
-  const handleAddNote = (jobId: string, note: string) => {
-    setJobs(prevJobs =>
-      prevJobs.map(job =>
-        job.id === jobId
-          ? { ...job, notes: job.notes ? `${job.notes}\n${note}` : note }
-          : job
-      )
-    );
-
-    if (selectedJob?.id === jobId) {
-      setSelectedJob(prev => prev ? { ...prev, notes: prev.notes ? `${prev.notes}\n${note}` : note } : null);
+  const handleAddNote = async (jobId: string, note: string) => {
+    try {
+      const updatedJob = await addJobNote(jobId, note);
+      if (selectedJob?.id === jobId) {
+        setSelectedJob(updatedJob);
+      }
+    } catch (err) {
+      console.error('Failed to add note:', err);
     }
   };
 
@@ -95,6 +85,32 @@ function App() {
     { id: 'jobs', label: 'All Jobs', icon: List },
     { id: 'suggestions', label: 'Suggestions', icon: FileText },
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
+          <p className="text-text-secondary">Loading jobs...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-text-primary mb-2">Connection Error</h2>
+          <p className="text-text-secondary mb-4">{error}</p>
+          <p className="text-sm text-text-secondary">
+            Make sure the backend server is running on port 3001
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const renderContent = () => {
     switch (currentView) {
