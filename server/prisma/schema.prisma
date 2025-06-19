@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id                   String    @id @default(cuid())
+  title                String
+  company              String
+  location             String
+  salary               String?
+  type                 JobType
+  technologies         String[]
+  description          String
+  requirements         String[]
+  benefits             String[]
+  applicationDeadline  DateTime?
+  status               JobStatus @default(NEW)
+  priority             Priority  @default(MEDIUM)
+  dateAdded            DateTime  @default(now())
+  applicationDate      DateTime?
+  lastContact          DateTime?
+  notes                String?
+  contactEmail         String?
+  contactPhone         String?
+  contactWebsite       String?
+  contactLinkedin      String?
+  responses            Response[]
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@map("jobs")
+}
+
+model Response {
+  id      String       @id @default(cuid())
+  date    DateTime
+  type    ResponseType
+  message String
+  sender  String
+  jobId   String
+  job     Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("responses")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  REMOTE
+  HYBRID
+}
+
+enum JobStatus {
+  NEW
+  REVIEWING
+  APPLIED
+  INTERVIEW_SCHEDULED
+  INTERVIEWED
+  AWAITING_RESPONSE
+  OFFER_RECEIVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum ResponseType {
+  EMAIL
+  PHONE
+  LINKEDIN
+  OTHER
+}
