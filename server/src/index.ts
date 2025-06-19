@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { PrismaClient } from '@prisma/client';
 import jobRoutes from './routes/jobs';
 import responseRoutes from './routes/responses';
+import importRoutes from './routes/import';
 import { errorHandler } from './middleware/errorHandler';
 import { AddressInfo } from 'net';
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/jobs', jobRoutes);
 app.use('/api/responses', responseRoutes);
+app.use('/api/import/markdown', importRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

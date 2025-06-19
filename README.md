@@ -150,6 +150,10 @@ The application will be available at:
 - `PATCH /api/jobs/:id/notes` - Update job notes
 
 #### Responses
+- DELETE /api/responses/:id - Delete response
+
+#### Import
+- POST /api/import/markdown - Import jobs from `JOBS_SOURCE.md` into the database. Returns JSON with counts of created and skipped jobs.
 - `POST /api/responses` - Create new response
 - `GET /api/responses/job/:jobId` - Get responses for a job
 - `DELETE /api/responses/:id` - Delete response
