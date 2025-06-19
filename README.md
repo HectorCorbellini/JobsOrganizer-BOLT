@@ -89,14 +89,49 @@ npm run dev:full
 
 This will start both servers concurrently. You can access the application in your browser at the URL provided in the terminal output (usually `http://localhost:5174` or similar).
 
-2. **Start the frontend development server**
-   ```bash
-   npm run dev
-   ```
+## Deployment to GitHub
 
-3. **Or run both simultaneously**
+To upload this project to a new GitHub repository:
+
+1. **Create a new repository on GitHub**
+   - Go to [GitHub](https://github.com/new)
+   - Choose a name for your repository (e.g., `JobsOrganizer-BOLT`)
+   - Keep it public or private as per your preference
+   - Do NOT initialize with a README, .gitignore, or license
+
+2. **Initialize Git and push to GitHub**
    ```bash
-   npm run dev:full
+   # Initialize git repository
+   git init -b main
+   
+   # Add all files
+   git add .
+   
+   # Make initial commit
+   git commit -m "Initial commit"
+   
+   # Add the remote repository
+   git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git
+   
+   # Push to GitHub
+   git push -u origin main
+   ```
+   Replace `YOUR-USERNAME` with your GitHub username and `YOUR-REPOSITORY-NAME` with your repository name.
+
+3. **Set up GitHub token (if required)**
+   - If you get authentication errors, you'll need to create a personal access token:
+     1. Go to GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)
+     2. Generate a new token with 'repo' scope
+     3. Use this token as your password when pushing
+
+4. **For existing repositories**
+   If you're adding to an existing repository, first pull any changes:
+   ```bash
+   git pull origin main --allow-unrelated-histories
+   ```
+   Then push your changes:
+   ```bash
+   git push -u origin main
    ```
 
 The application will be available at:
