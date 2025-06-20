@@ -29,65 +29,93 @@ A full-stack application for managing job applications with a React frontend and
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- Docker and Docker Compose (for running the PostgreSQL database)
-- npm or yarn
+- Docker and Docker Compose
+- npm
 
-### Installation & Setup
+### 1. Clone & Install
 
-1.  **Clone the repository**
-    ```bash
-    git clone <repository-url>
-    cd job-tracker
-    ```
+First, clone the repository and install all dependencies for both the frontend and backend with a single command from the project root.
 
-2.  **Install all dependencies**
+```bash
+git clone <repository-url>
+cd <repository-folder>
+npm install && (cd server && npm install)
+```
 
-    This installs dependencies for both the root project (frontend) and the `server` (backend).
-    ```bash
-    npm install && (cd server && npm install)
-    ```
+### 2. Configure Environment
 
-3.  **Set up environment variables**
+Next, create the environment file for the server and ensure it has the correct database connection string.
 
-    Navigate to the server directory and create a `.env` file from the example.
-    ```bash
-    cd server
-    cp .env.example .env
-    ```
-    The default `DATABASE_URL` in the `.env` file is configured to work with the Docker setup.
+```bash
+# From the project root
+cd server
+cp .env.example .env
+```
 
-4.  **Start the database**
+Open the newly created `server/.env` file and make sure the `DATABASE_URL` is exactly as follows:
 
-    A Docker Compose file is provided to easily run a PostgreSQL database in a container.
-    ```bash
-    docker-compose up -d
-    ```
+```env
+DATABASE_URL="postgresql://jobtracker_user:jobtracker_password@localhost:5433/jobtracker?schema=public"
+```
 
-5.  **Set up the database schema**
+### 3. Start Database & Apply Schema
 
-    This command creates the necessary tables in your database.
-    ```bash
-    cd server
-    npx prisma migrate dev --name init
-    ```
+With the configuration in place, start the PostgreSQL database using Docker and apply the database schema with Prisma Migrate. Run these commands from the **project root**.
 
-6.  **Import job data (Optional)**
+```bash
+# Start the database container in the background
+docker-compose up -d
 
-    To populate the database with the initial job listings from `JOBS_SOURCE.md`:
-    ```bash
-    cd server
-    npm run db:import
-    ```
+# Apply the database schema
+(cd server && npx prisma migrate dev --name init)
+```
 
-### Running the Application
+### 4. Run the Application
 
-To run the entire application (both frontend and backend) with a single command, run the following from the **project root**:
+Finally, run the entire application (both frontend and backend) with a single command from the **project root**.
 
 ```bash
 npm run dev:full
 ```
 
-This will start both servers concurrently. You can access the application in your browser at the URL provided in the terminal output (usually `http://localhost:5174` or similar).
+The servers will start concurrently. You can access the application at `http://localhost:5173` (or the port specified in the terminal).
+
+### 5. Populate the Database (Optional)
+
+After starting the application, you can populate the database with the sample job data from `JOBS_SOURCE.md`. There are two ways to do this:
+
+**Method 1: Using the Import Script**
+
+Run the following command from the `server` directory. This is useful for the initial setup.
+
+```bash
+# From the server directory
+npm run db:import
+```
+
+**Method 2: Using the API Endpoint**
+
+While the application is running, you can trigger the import by sending a POST request to the API. This is useful for re-importing data without restarting the server.
+
+```bash
+curl -X POST http://localhost:3001/api/import/markdown
+```
+This will return a JSON response indicating the number of created and skipped jobs.
+
+## Troubleshooting
+
+### Port in Use Errors
+
+If you encounter an error like `Error: listen EADDRINUSE: address already in use`, it means a previous server instance is still running. Before starting the application, it's a good practice to ensure all old processes are stopped.
+
+You can do this by running the following command from the project root:
+
+```bash
+# This command forcefully stops any lingering server or vite processes.
+pkill -f "(concurrently|tsx|vite)" || true
+```
+
+After running this, you can safely start the application with `npm run dev:full`.
 
 ## Deployment to GitHub
 

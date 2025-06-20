@@ -1,3 +1,22 @@
+type JobStatus = 
+  | 'new' 
+  | 'reviewing' 
+  | 'applied' 
+  | 'interview_scheduled' 
+  | 'interviewed' 
+  | 'awaiting_response' 
+  | 'offer_received' 
+  | 'rejected' 
+  | 'withdrawn';
+
+interface Response {
+  id: string;
+  date: string;
+  type: 'email' | 'phone' | 'linkedin' | 'other';
+  message: string;
+  sender: string;
+}
+
 export interface Job {
   id: string;
   title: string;
@@ -24,25 +43,6 @@ export interface Job {
   };
   responses: Response[];
 }
-
-export interface Response {
-  id: string;
-  date: string;
-  type: 'email' | 'phone' | 'linkedin' | 'other';
-  message: string;
-  sender: string;
-}
-
-export type JobStatus = 
-  | 'new' 
-  | 'reviewing' 
-  | 'applied' 
-  | 'interview_scheduled' 
-  | 'interviewed' 
-  | 'awaiting_response' 
-  | 'offer_received' 
-  | 'rejected' 
-  | 'withdrawn';
 
 export type Priority = 'high' | 'medium' | 'low';
 

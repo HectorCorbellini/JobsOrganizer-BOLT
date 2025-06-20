@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { PrismaClient } from '@prisma/client';
+import prisma from './lib/prisma';
 import jobRoutes from './routes/jobs';
 import responseRoutes from './routes/responses';
 import importRoutes from './routes/import';
@@ -10,7 +10,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { AddressInfo } from 'net';
 
 const app = express();
-const prisma = new PrismaClient();
+
 const PORT = process.env.PORT || 3001;
 
 // Middleware

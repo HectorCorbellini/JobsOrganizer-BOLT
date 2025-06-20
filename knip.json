@@ -1,0 +1,17 @@
+{
+  "workspaces": {
+    ".": {
+      "entry": [
+        "src/main.tsx",
+        "vite.config.ts",
+        "postcss.config.js",
+        "tailwind.config.js"
+      ]
+    },
+    "server": {
+      "entry": [
+        "src/index.ts"
+      ]
+    }
+  }
+}
