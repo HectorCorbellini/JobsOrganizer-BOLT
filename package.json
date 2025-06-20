@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server:dev": "cd server && npm run dev",
+    "server:setup": "cd server && npm install && npm run db:generate && npm run db:push && npm run db:seed",
+    "dev:full": "concurrently \"npm run server:dev\" \"npm run dev\""
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
