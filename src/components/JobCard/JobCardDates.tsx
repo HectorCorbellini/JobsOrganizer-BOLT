@@ -1,4 +1,3 @@
-import React from 'react';
 import { Calendar, User, Clock } from 'lucide-react';
 import { Job } from '../../types/Job';
 

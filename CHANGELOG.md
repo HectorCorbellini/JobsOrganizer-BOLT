@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- New `Sidebar` component for improved navigation and code organization.
+- Page components for better route-based rendering.
+- React Context (`JobContext`) for centralized state management.
+
+### Changed
+- Refactored `App.tsx` to use React Router for navigation.
+- Moved layout-related code from `App.tsx` to dedicated layout components.
+- Updated `MainLayout` to use the new `Sidebar` component.
+
+### Fixed
+- Resolved issues with job selection and navigation in the job list view.
+
 ## [0.4.0] - 2025-06-19
 
 ### Fixed

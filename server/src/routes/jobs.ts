@@ -1,25 +1,16 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { jobService } from '../services/jobService';
 import { validateJob, validateJobUpdate } from '../middleware/validation';
-import { transformJobFromDB, transformJobToDB } from '../utils/transformers';
+
 
 const router = Router();
-const prisma = new PrismaClient();
+
 
 // GET /api/jobs - Get all jobs
 router.get('/', async (req, res, next) => {
   try {
-    const jobs = await prisma.job.findMany({
-      include: {
-        responses: {
-          orderBy: { date: 'desc' }
-        }
-      },
-      orderBy: { dateAdded: 'desc' }
-    });
-
-    const transformedJobs = jobs.map(transformJobFromDB);
-    res.json(transformedJobs);
+    const jobs = await jobService.getAllJobs();
+    res.json(jobs);
   } catch (error) {
     next(error);
   }
@@ -30,20 +21,11 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     
-    const job = await prisma.job.findUnique({
-      where: { id },
-      include: {
-        responses: {
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
-
+    const job = await jobService.getJobById(id);
     if (!job) {
       return res.status(404).json({ error: 'Job not found' });
     }
-
-    res.json(transformJobFromDB(job));
+    res.json(job);
   } catch (error) {
     next(error);
   }
@@ -52,16 +34,9 @@ router.get('/:id', async (req, res, next) => {
 // POST /api/jobs - Create new job
 router.post('/', validateJob, async (req, res, next) => {
   try {
-    const jobData = transformJobToDB(req.body);
-    
-    const job = await prisma.job.create({
-      data: jobData,
-      include: {
-        responses: true
-      }
-    });
+    const job = await jobService.createJob(req.body);
 
-    res.status(201).json(transformJobFromDB(job));
+    res.status(201).json(job);
   } catch (error) {
     next(error);
   }
@@ -71,19 +46,9 @@ router.post('/', validateJob, async (req, res, next) => {
 router.put('/:id', validateJobUpdate, async (req, res, next) => {
   try {
     const { id } = req.params;
-    const jobData = transformJobToDB(req.body);
+    const job = await jobService.updateJob(id, req.body);
 
-    const job = await prisma.job.update({
-      where: { id },
-      data: jobData,
-      include: {
-        responses: {
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
-
-    res.json(transformJobFromDB(job));
+    res.json(job);
   } catch (error) {
     next(error);
   }
@@ -94,9 +59,7 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    await prisma.job.delete({
-      where: { id }
-    });
+    await jobService.deleteJob(id);
 
     res.status(204).send();
   } catch (error) {
@@ -109,29 +72,12 @@ router.patch('/:id/status', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-
     if (!status) {
       return res.status(400).json({ error: 'Status is required' });
     }
+    const job = await jobService.updateJobStatus(id, status);
 
-    const updateData: any = { status: status.toUpperCase() };
-    
-    // Set application date when status changes to APPLIED
-    if (status.toUpperCase() === 'APPLIED') {
-      updateData.applicationDate = new Date();
-    }
-
-    const job = await prisma.job.update({
-      where: { id },
-      data: updateData,
-      include: {
-        responses: {
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
-
-    res.json(transformJobFromDB(job));
+    res.json(job);
   } catch (error) {
     next(error);
   }
@@ -142,18 +88,9 @@ router.patch('/:id/notes', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { notes } = req.body;
+    const job = await jobService.updateJobNotes(id, notes);
 
-    const job = await prisma.job.update({
-      where: { id },
-      data: { notes },
-      include: {
-        responses: {
-          orderBy: { date: 'desc' }
-        }
-      }
-    });
-
-    res.json(transformJobFromDB(job));
+    res.json(job);
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Star } from 'lucide-react';
 import { Job } from '../../types/Job';
 import { getPriorityColor } from '../../utils/jobUtils';

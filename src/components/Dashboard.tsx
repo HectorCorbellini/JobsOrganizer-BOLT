@@ -1,4 +1,3 @@
-import React from 'react';
 import { Job } from '../types/Job';
 import { useDashboardStats } from '../hooks/useDashboardStats';
 import StatsGrid from './Dashboard/StatsGrid';

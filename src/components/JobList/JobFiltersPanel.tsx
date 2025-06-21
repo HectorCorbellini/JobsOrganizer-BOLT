@@ -1,4 +1,3 @@
-import React from 'react';
 import { Job, JobFilters } from '../../types/Job';
 import { formatStatus } from '../../utils/jobUtils';
 

@@ -1,84 +1,99 @@
 # JobTracker - Job Application Assistant
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.2.0-61dafb.svg)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.0+-339933.svg)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
+
+A full-stack application for managing job applications with a modern React frontend and Node.js/Express backend with PostgreSQL database.
+
 A full-stack application for managing job applications with a React frontend and Node.js/Express backend with PostgreSQL database.
 
-## Features
+## ✨ Features
 
-- **Dashboard**: Overview of application progress and statistics
-- **Job Management**: Track job applications with detailed information
-- **Status Tracking**: Monitor application status from initial review to final outcome
-- **Priority System**: Automatically calculate job priorities based on location, technologies, and compensation
-- **Notes & Communication**: Track communication history and add personal notes
-- **Suggestions**: AI-powered recommendations for improving applications
+- **Modern Dashboard**: Clean, responsive interface with key metrics and statistics
+- **Job Management**: Track all job applications with detailed information
+- **Smart Priority System**: Automatic priority calculation based on multiple factors
+- **Status Tracking**: Visual indicators for application status (applied, interviewing, offer, etc.)
+- **Notes & Communication**: Track all interactions with potential employers
+- **AI-Powered Suggestions**: Get recommendations for improving your applications
+- **Responsive Design**: Works on desktop and mobile devices
+- **Data Import/Export**: Easily import job listings and export your data
 
 ## Tech Stack
 
+## 🛠 Tech Stack
+
 ### Frontend
-- React 18 with TypeScript
-- Tailwind CSS for styling
-- Lucide React for icons
-- Vite for development and building
+- ⚛️ React 18 with TypeScript
+- 🎨 Tailwind CSS for styling
+- 🔍 React Router for navigation
+- 📊 Recharts for data visualization
+- 🎯 React Context API for state management
+- ⚡ Vite for fast development and building
 
 ### Backend
-- Node.js with Express.js
-- PostgreSQL database
-- Prisma ORM
-- TypeScript
+- 🚀 Node.js with Express.js
+- 🐘 PostgreSQL database with Docker
+- 🔑 Prisma ORM for database operations
+- 📦 TypeScript for type safety
+- 🔄 RESTful API design
 
-## Getting Started
+## 🚀 Getting Started
+
+This project uses a monorepo structure with a single command to set up and run both frontend and backend services.
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- Docker and Docker Compose
-- npm
 
-### 1. Clone & Install
+- **Node.js**: v18 or higher
+- **Docker**: Docker and Docker Compose must be installed and running.
+- **npm**: Included with Node.js.
 
-First, clone the repository and install all dependencies for both the frontend and backend with a single command from the project root.
+### 1. Clone the Repository
+
+First, clone the repository to your local machine:
 
 ```bash
 git clone <repository-url>
 cd <repository-folder>
-npm install && (cd server && npm install)
 ```
 
-### 2. Configure Environment
+### 2. Configure the Environment
 
-Next, create the environment file for the server and ensure it has the correct database connection string.
+Next, create the environment file for the server. This only needs to be done once.
 
 ```bash
-# From the project root
+# From the project root, navigate to the server directory
 cd server
+
+# Copy the example environment file
 cp .env.example .env
 ```
 
-Open the newly created `server/.env` file and make sure the `DATABASE_URL` is exactly as follows:
+Open the newly created `server/.env` file and ensure the `DATABASE_URL` is set correctly:
 
 ```env
 DATABASE_URL="postgresql://jobtracker_user:jobtracker_password@localhost:5433/jobtracker?schema=public"
 ```
 
-### 3. Start Database & Apply Schema
+### 3. Start the Application
 
-With the configuration in place, start the PostgreSQL database using Docker and apply the database schema with Prisma Migrate. Run these commands from the **project root**.
-
-```bash
-# Start the database container in the background
-docker-compose up -d
-
-# Apply the database schema
-(cd server && npx prisma migrate dev --name init)
-```
-
-### 4. Run the Application
-
-Finally, run the entire application (both frontend and backend) with a single command from the **project root**.
+With the setup complete, you can now start the entire application with a single command from the **project root**.
 
 ```bash
-npm run dev:full
+npm run start:app
 ```
 
-The servers will start concurrently. You can access the application at `http://localhost:5173` (or the port specified in the terminal).
+This command will automatically:
+
+1.  **Install all dependencies** for both the frontend and backend.
+2.  **Start the PostgreSQL database** using Docker.
+3.  **Set up the database schema** with Prisma.
+4.  **Start the backend server**, automatically finding a free port if the default is busy.
+5.  **Start the frontend server**, which waits for the backend to be ready before launching.
+
+The application will be available at the URL shown in the terminal (usually `http://localhost:5173` or the next available port).
 
 ### 5. Populate the Database (Optional)
 
@@ -117,88 +132,145 @@ pkill -f "(concurrently|tsx|vite)" || true
 
 After running this, you can safely start the application with `npm run dev:full`.
 
-## Deployment to GitHub
+## 📦 Deployment
 
-To upload this project to a new GitHub repository:
+### Prerequisites
 
-1. **Create a new repository on GitHub**
-   - Go to [GitHub](https://github.com/new)
-   - Choose a name for your repository (e.g., `JobsOrganizer-BOLT`)
-   - Keep it public or private as per your preference
-   - Do NOT initialize with a README, .gitignore, or license
+- Node.js 18+ and npm
+- Docker and Docker Compose
+- Git
 
-2. **Initialize Git and push to GitHub**
+### Local Development
+
+1. Clone the repository:
    ```bash
-   # Initialize git repository
-   git init -b main
-   
-   # Add all files
-   git add .
-   
-   # Make initial commit
-   git commit -m "Initial commit"
-   
-   # Add the remote repository
-   git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git
-   
-   # Push to GitHub
-   git push -u origin main
+   git clone https://github.com/yourusername/JobsOrganizer-BOLT.git
+   cd JobsOrganizer-BOLT
    ```
-   Replace `YOUR-USERNAME` with your GitHub username and `YOUR-REPOSITORY-NAME` with your repository name.
 
-3. **Set up GitHub token (if required)**
-   - If you get authentication errors, you'll need to create a personal access token:
-     1. Go to GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)
-     2. Generate a new token with 'repo' scope
-     3. Use this token as your password when pushing
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-4. **For existing repositories**
-   If you're adding to an existing repository, first pull any changes:
+3. Start the development environment:
    ```bash
-   git pull origin main --allow-unrelated-histories
+   # Install dependencies
+   npm install
+   
+   # Start the application
+   npm run dev
    ```
-   Then push your changes:
+
+4. Open [http://localhost:5174](http://localhost:5174) in your browser.
+
+### Production Deployment
+
+1. Build the application:
    ```bash
-   git push -u origin main
+   npm run build
    ```
+
+2. Start the production server:
+   ```bash
+   npm start
+   ```
+
+### Docker Deployment
+
+```bash
+# Build and start containers
+docker-compose up --build
+
+# Stop containers
+docker-compose down
+```
 
 The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
-### API Endpoints
+## 📚 Documentation
+
+### API Reference
 
 #### Jobs
-- `GET /api/jobs` - Get all jobs
-- `GET /api/jobs/:id` - Get job by ID
-- `POST /api/jobs` - Create new job
-- `PUT /api/jobs/:id` - Update job
-- `DELETE /api/jobs/:id` - Delete job
+- `GET /api/jobs` - List all jobs with optional filtering
+- `GET /api/jobs/:id` - Get job details by ID
+- `POST /api/jobs` - Create a new job application
+- `PUT /api/jobs/:id` - Update job details
+- `DELETE /api/jobs/:id` - Delete a job application
 - `PATCH /api/jobs/:id/status` - Update job status
-- `PATCH /api/jobs/:id/notes` - Update job notes
+- `PATCH /api/jobs/:id/priority` - Update job priority
 
 #### Responses
-- DELETE /api/responses/:id - Delete response
-
-#### Import
-- POST /api/import/markdown - Import jobs from `JOBS_SOURCE.md` into the database. Returns JSON with counts of created and skipped jobs.
+- `GET /api/responses` - List all responses
+- `GET /api/responses/:id` - Get response by ID
 - `POST /api/responses` - Create new response
-- `GET /api/responses/job/:jobId` - Get responses for a job
+- `PUT /api/responses/:id` - Update response
 - `DELETE /api/responses/:id` - Delete response
+- `GET /api/responses/job/:jobId` - Get responses for a specific job
 
-### Database Schema
+#### Import/Export
+- `POST /api/import/markdown` - Import jobs from markdown
+- `GET /api/export/markdown` - Export jobs to markdown format
+- `POST /api/import/json` - Import jobs from JSON
+- `GET /api/export/json` - Export jobs to JSON format
 
-The application uses the following main entities:
+## 🗄 Database Schema
 
-- **Job**: Core job application data
+The application uses a PostgreSQL database with the following main entities:
+
+- **Job**: Core job application data (title, company, status, etc.)
 - **Response**: Communication history for each job
+- **Note**: Additional notes for jobs
+- **User**: Application users (for future authentication)
 
 See `server/prisma/schema.prisma` for the complete schema definition.
 
-### Project Structure
+### Migrations
+
+To create and apply database migrations:
+
+```bash
+# Create a new migration
+npx prisma migrate dev --name your_migration_name
+
+# Apply pending migrations
+npx prisma migrate deploy
+```
+
+## 🏗 Project Structure
 
 ```
-├── src/                    # Frontend source code
+├── src/
+│   ├── components/        # Reusable React components
+│   │   ├── Common/        # Common UI components
+│   │   ├── Dashboard/     # Dashboard-specific components
+│   │   ├── JobCard/       # Job card related components
+│   │   └── Layout/        # Layout components (sidebar, header, etc.)
+│   ├── context/          # React context providers
+│   ├── hooks/            # Custom React hooks
+│   ├── pages/            # Page components
+│   ├── services/         # API service layer
+│   └── types/            # TypeScript type definitions
+├── server/
+│   ├── prisma/          # Database schema and migrations
+│   ├── src/
+│   │   ├── controllers/  # Request handlers
+│   │   ├── middleware/   # Express middleware
+│   │   ├── routes/      # API route definitions
+│   │   ├── services/    # Business logic
+│   │   └── utils/       # Utility functions
+│   └── .env             # Environment configuration
+├── public/              # Static assets
+├── .github/             # GitHub workflows and templates
+├── .vscode/             # VS Code settings
+├── .eslintrc.json       # ESLint configuration
+├── .prettierrc          # Prettier configuration
+├── tsconfig.json        # TypeScript configuration
+└── package.json         # Project dependencies and scripts
 │   ├── components/         # React components
 │   ├── hooks/             # Custom React hooks
 │   ├── services/          # API service layer

@@ -1,4 +1,3 @@
-import React from 'react';
 import { BarChart3, CheckCircle, TrendingUp, Clock } from 'lucide-react';
 import Card from '../Common/Card';
 

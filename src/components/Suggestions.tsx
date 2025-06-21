@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileText, MessageCircle, Lightbulb, ExternalLink, Calendar, Mail } from 'lucide-react';
 import { Job } from '../types/Job';
 

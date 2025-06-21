@@ -1,4 +1,3 @@
-import React from 'react';
 import { Search, Filter, SortAsc } from 'lucide-react';
 
 interface JobListHeaderProps {

@@ -1,32 +1,15 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { responseService } from '../services/responseService';
 import { validateResponse } from '../middleware/validation';
 
 const router = Router();
-const prisma = new PrismaClient();
+
 
 // POST /api/responses - Create new response
 router.post('/', validateResponse, async (req, res, next) => {
   try {
-    const { jobId, date, type, message, sender } = req.body;
-
-    const response = await prisma.response.create({
-      data: {
-        jobId,
-        date: new Date(date),
-        type: type.toUpperCase(),
-        message,
-        sender
-      }
-    });
-
-    res.status(201).json({
-      id: response.id,
-      date: response.date.toISOString(),
-      type: response.type.toLowerCase(),
-      message: response.message,
-      sender: response.sender
-    });
+    const newResponse = await responseService.create(req.body);
+    res.status(201).json(newResponse);
   } catch (error) {
     next(error);
   }
@@ -36,21 +19,8 @@ router.post('/', validateResponse, async (req, res, next) => {
 router.get('/job/:jobId', async (req, res, next) => {
   try {
     const { jobId } = req.params;
-
-    const responses = await prisma.response.findMany({
-      where: { jobId },
-      orderBy: { date: 'desc' }
-    });
-
-    const transformedResponses = responses.map(response => ({
-      id: response.id,
-      date: response.date.toISOString(),
-      type: response.type.toLowerCase(),
-      message: response.message,
-      sender: response.sender
-    }));
-
-    res.json(transformedResponses);
+    const responses = await responseService.getByJobId(jobId);
+    res.json(responses);
   } catch (error) {
     next(error);
   }
@@ -60,11 +30,7 @@ router.get('/job/:jobId', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-
-    await prisma.response.delete({
-      where: { id }
-    });
-
+    await responseService.delete(id);
     res.status(204).send();
   } catch (error) {
     next(error);

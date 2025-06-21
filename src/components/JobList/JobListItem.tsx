@@ -1,4 +1,3 @@
-import React from 'react';
 import { Building, MapPin, Calendar } from 'lucide-react';
 import { Job } from '../../types/Job';
 import { getStatusColor, formatStatus } from '../../utils/jobUtils';

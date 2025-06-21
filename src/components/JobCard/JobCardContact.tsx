@@ -1,4 +1,3 @@
-import React from 'react';
 import { Mail, Globe } from 'lucide-react';
 import { Job } from '../../types/Job';
 
