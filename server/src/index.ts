@@ -29,6 +29,22 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+  'http://localhost:5173', // Local dev frontend
+  'http://localhost:5174', // Local dev frontend
+  'https://your-frontend-app-name.vercel.app', // Deployed frontend (replace later)
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
 // Routes
 app.use('/api/jobs', jobRoutes);
 app.use('/api/responses', responseRoutes);
