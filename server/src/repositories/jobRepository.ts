@@ -28,6 +28,13 @@ export const jobRepository = {
     });
   },
 
+  async findByTitleAndCompany(title: string, company: string): Promise<JobWithRelations | null> {
+    return prisma.job.findFirst({
+      where: { title, company },
+      ...jobWithRelations,
+    });
+  },
+
   async create(data: Prisma.JobCreateInput): Promise<JobWithRelations> {
     return prisma.job.create({
       data,

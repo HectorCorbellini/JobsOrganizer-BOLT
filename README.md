@@ -97,25 +97,17 @@ The application will be available at the URL shown in the terminal (usually `htt
 
 ### 5. Populate the Database (Optional)
 
-After starting the application, you can populate the database with the sample job data from `JOBS_SOURCE.md`. There are two ways to do this:
+After starting the application, you can populate the database with the sample job data from `JOBS_SOURCE.md`. Use the following method:
 
-**Method 1: Using the Import Script**
+**Using the API Endpoint**
 
-Run the following command from the `server` directory. This is useful for the initial setup.
-
-```bash
-# From the server directory
-npm run db:import
-```
-
-**Method 2: Using the API Endpoint**
-
-While the application is running, you can trigger the import by sending a POST request to the API. This is useful for re-importing data without restarting the server.
+While the application is running, you can trigger the import by sending a POST request to the API. This is the recommended way to import data:
 
 ```bash
 curl -X POST http://localhost:3001/api/import/markdown
 ```
-This will return a JSON response indicating the number of created and skipped jobs.
+
+This will import all jobs from the `JOBS_SOURCE.md` file into your database. The import process will skip any jobs that already exist (matching by title and company).
 
 ## Troubleshooting
 
@@ -127,10 +119,20 @@ You can do this by running the following command from the project root:
 
 ```bash
 # This command forcefully stops any lingering server or vite processes.
-pkill -f "(concurrently|tsx|vite)" || true
+pkill -f "(concurrently|tsx|vite" || true
 ```
 
-After running this, you can safely start the application with `npm run dev:full`.
+After running this, you can safely start the application again.
+
+### Database Import Issues
+
+If you encounter issues with importing jobs from `JOBS_SOURCE.md`:
+
+1. **Check Database Connection**: Ensure the database is running and the connection string in `.env` is correct.
+2. **Verify File Location**: The `JOBS_SOURCE.md` file should be in the project root directory.
+3. **Check File Permissions**: Make sure the application has read access to the `JOBS_SOURCE.md` file.
+4. **View Server Logs**: Check the server logs for any specific error messages during import.
+5. **Manual Import**: As an alternative, you can manually populate the database through the application's web interface.
 
 ## 📦 Deployment
 
@@ -150,20 +152,30 @@ After running this, you can safely start the application with `npm run dev:full`
 
 2. Set up environment variables:
    ```bash
+   # Navigate to the server directory
+   cd server
+   # Copy the example environment file
    cp .env.example .env
    # Edit .env with your configuration
    ```
-
-3. Start the development environment:
-   ```bash
-   # Install dependencies
-   npm install
    
-   # Start the application
-   npm run dev
+   Make sure your `.env` file contains the correct database URL:
+   ```env
+   DATABASE_URL="postgresql://jobtracker_user:jobtracker_password@localhost:5433/jobtracker?schema=public"
    ```
 
-4. Open [http://localhost:5174](http://localhost:5174) in your browser.
+3. Start the development environment from the project root:
+   ```bash
+   # Install dependencies and start the application
+   npm run start:app
+   ```
+
+4. The application will be available at [http://localhost:5173](http://localhost:5173) (or the next available port if 5173 is in use).
+
+5. To import sample data, in a new terminal run:
+   ```bash
+   curl -X POST http://localhost:3001/api/import/markdown
+   ```
 
 ### Production Deployment
 

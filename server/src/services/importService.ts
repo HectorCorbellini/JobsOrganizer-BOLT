@@ -59,10 +59,8 @@ export const importService = {
       }
 
       // Prevent duplicates
-      const exists = await jobRepository.findFirst({
-        title: jobData.title,
-        company: jobData.company,
-      });
+      const exists = await jobRepository.findByTitleAndCompany(jobData.title, jobData.company);
+
 
       if (exists) {
         skipped++;
