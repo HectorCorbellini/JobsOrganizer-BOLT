@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { Job } from '../types/Job';
-import { useJobs } from '../hooks/useJobs';
+import { Job } from '../domain/models/Job';
+import { useJobs } from '../application/hooks/useJobs';
+import { apiService } from '../infrastructure/api/api';
 
 interface IJobContext {
   jobs: Job[];
@@ -19,7 +20,7 @@ interface IJobContext {
 const JobContext = createContext<IJobContext | undefined>(undefined);
 
 export const JobProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { jobs, loading, error, updateJobStatus, addJobNote, refetch } = useJobs();
+  const { jobs, loading, error, updateJobStatus, addJobNote, refetch } = useJobs(apiService);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
 

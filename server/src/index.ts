@@ -2,11 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import prisma from './lib/prisma';
-import jobRoutes from './routes/jobs';
-import responseRoutes from './routes/responses';
-import importRoutes from './routes/import';
-import { errorHandler } from './middleware/errorHandler';
+import prisma from './lib/prisma.js';
+import jobRoutes from './presentation/routes/jobs.js';
+import responseRoutes from './presentation/routes/responses.js';
+import importRoutes from './presentation/routes/import.js';
+import { errorHandler } from './presentation/middleware/errorHandler.js';
 import { AddressInfo } from 'net';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -95,7 +95,7 @@ server.on('listening', async () => {
     process.exit(1);
   }
 });
-server.on('error', (err: any) => {
+server.on('error', (err: NodeJS.ErrnoException) => {
   if ((err as any).code === 'EADDRINUSE') {
     console.warn(`Port ${DEFAULT_PORT} in use, retrying on random free port...`);
     server.listen(0);

@@ -1,4 +1,4 @@
-import { Job } from '../types/Job';
+import { Job } from '../domain/models/Job';
 import JobCardHeader from './JobCard/JobCardHeader';
 import JobCardSection from './JobCard/JobCardSection';
 import JobCardDates from './JobCard/JobCardDates';

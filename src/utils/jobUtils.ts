@@ -1,4 +1,4 @@
-import { Job, Priority } from '../types/Job';
+import { Job, Priority } from '../domain/models/Job';
 
 export const calculatePriority = (job: Job): Priority => {
   let score = 0;

@@ -32,6 +32,7 @@ A full-stack application for managing job applications with a React frontend and
 - 📊 Recharts for data visualization
 - 🎯 React Context API for state management
 - ⚡ Vite for fast development and building
+- 🛣️ TypeScript path aliases (`@hooks/*`, `@services/*`, `@api/*`, etc.) for simplified imports
 
 ### Backend
 - 🚀 Node.js with Express.js
@@ -71,7 +72,7 @@ cd server
 cp .env.example .env
 ```
 
-Open the newly created `server/.env` file and ensure the `DATABASE_URL` is set correctly:
+Open the newly created `server/.env` file and ensure the `DATABASE_URL` is set correctly. You can also adjust the `PORT` (default 3001) and `FRONTEND_URL` (default http://localhost:5173) variables in this file as needed:
 
 ```env
 DATABASE_URL="postgresql://jobtracker_user:jobtracker_password@localhost:5433/jobtracker?schema=public"
@@ -88,10 +89,27 @@ npm run start:app
 This command will automatically:
 
 1.  **Install all dependencies** for both the frontend and backend.
-2.  **Start the PostgreSQL database** using Docker.
+
+2.  **Start the PostgreSQL database using Docker-Compose**: `docker-compose up -d`.
+
 3.  **Set up the database schema** with Prisma.
+
 4.  **Start the backend server**, automatically finding a free port if the default is busy.
+
 5.  **Start the frontend server**, which waits for the backend to be ready before launching.
+
+The application will be available at the URL shown in the terminal (usually `http://localhost:5173` or the next available port).
+
+
+### 4. Run Tests
+
+To run the test suite, from the project root execute:
+
+```bash
+npm run test
+```
+
+This command will run the tests for both the frontend and backend.
 
 The application will be available at the URL shown in the terminal (usually `http://localhost:5173` or the next available port).
 
@@ -133,6 +151,16 @@ If you encounter issues with importing jobs from `JOBS_SOURCE.md`:
 3. **Check File Permissions**: Make sure the application has read access to the `JOBS_SOURCE.md` file.
 4. **View Server Logs**: Check the server logs for any specific error messages during import.
 5. **Manual Import**: As an alternative, you can manually populate the database through the application's web interface.
+
+## 📚 Documentation
+
+All project docs are under the [`docs/`](./docs) directory:
+
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Changelog](./docs/CHANGELOG.md)
+- [CV Architecture](./docs/CV_ARCH.md)
+- [Python Notes](./docs/ORGANIZER_PY.md)
+- [Web Guide](./docs/WEB.md)
 
 ## 📦 Deployment
 

@@ -5,6 +5,7 @@ import MainLayout from './components/Layout/MainLayout';
 import DashboardPage from './pages/DashboardPage';
 import JobListPage from './pages/JobListPage';
 import SuggestionsPage from './pages/SuggestionsPage';
+import ErrorBoundary from './components/Common/ErrorBoundary';
 
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, route: '/' },
@@ -31,7 +32,9 @@ function App() {
   return (
     <Router>
       <JobProvider>
-        <AppContent />
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
       </JobProvider>
     </Router>
   );

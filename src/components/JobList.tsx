@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Building } from 'lucide-react';
-import { Job } from '../types/Job';
-import { useJobList } from '../hooks/useJobList';
+import { Job } from '../domain/models/Job';
+import { useJobList } from '../application/hooks/useJobList';
 import JobListHeader from './JobList/JobListHeader';
 import JobFiltersPanel from './JobList/JobFiltersPanel';
 import JobListItem from './JobList/JobListItem';

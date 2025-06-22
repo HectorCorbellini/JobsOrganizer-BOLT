@@ -1,5 +1,5 @@
-import { Job } from '../types/Job';
-import { useDashboardStats } from '../hooks/useDashboardStats';
+import { Job } from '../domain/models/Job';
+import { useDashboardStats } from '../application/hooks/useDashboardStats';
 import StatsGrid from './Dashboard/StatsGrid';
 import PriorityDistribution from './Dashboard/PriorityDistribution';
 import ApplicationStatus from './Dashboard/ApplicationStatus';

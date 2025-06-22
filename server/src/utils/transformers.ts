@@ -1,4 +1,28 @@
-import { Job as PrismaJob, Response as PrismaResponse } from '@prisma/client';
+import { Prisma, Job as PrismaJob, Response as PrismaResponse, JobType, JobStatus, Priority } from '@prisma/client';
+
+export type ApiJobDTO = {
+  title: string;
+  company: string;
+  location: string;
+  salary?: string | null;
+  type?: string;
+  technologies: string[];
+  description: string;
+  requirements?: string[];
+  benefits?: string[];
+  status?: string;
+  priority?: string;
+  applicationDeadline?: string;
+  applicationDate?: string;
+  lastContact?: string;
+  notes?: string;
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+    website?: string;
+    linkedin?: string;
+  };
+};
 
 type JobWithResponses = PrismaJob & {
   responses: PrismaResponse[];
@@ -39,19 +63,25 @@ export const transformJobFromDB = (job: JobWithResponses) => {
   };
 };
 
-export const transformJobToDB = (job: any) => {
-  const data: any = {
+export const transformJobToDB = (job: ApiJobDTO): Prisma.JobCreateInput => {
+  const data: Prisma.JobCreateInput = {
     title: job.title,
     company: job.company,
     location: job.location,
     salary: job.salary,
-    type: job.type.toUpperCase().replace('-', '_'),
+    type: job.type
+      ? (job.type.toUpperCase().replace('-', '_') as JobType)
+      : JobType.FULL_TIME,
     technologies: job.technologies,
     description: job.description,
     requirements: job.requirements,
     benefits: job.benefits || [],
-    status: job.status ? job.status.toUpperCase().replace('_', '_') : 'NEW',
-    priority: job.priority ? job.priority.toUpperCase() : 'MEDIUM'
+    status: job.status
+      ? (job.status.toUpperCase().replace('_', '_') as JobStatus)
+      : JobStatus.NEW,
+    priority: job.priority
+      ? (job.priority.toUpperCase() as Priority)
+      : Priority.MEDIUM
   };
 
   if (job.applicationDeadline) {

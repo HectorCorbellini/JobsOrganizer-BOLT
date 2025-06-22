@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-import { apiService } from '../../services/api';
+import { apiService } from '../../infrastructure/api/api';
+import { IImportService } from '../../application/services/importService';
 
 interface ImportJobsProps {
   onImportSuccess: () => void;
+  importService?: IImportService;
 }
 
-export const ImportJobs: React.FC<ImportJobsProps> = ({ onImportSuccess }) => {
+export const ImportJobs: React.FC<ImportJobsProps> = ({ onImportSuccess, importService }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleImport = async () => {
+    const service: IImportService = importService || apiService;
+    
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
-      const result = await apiService.importFromMarkdown();
+      const result = await service.importFromMarkdown();
       setSuccessMessage(`${result.count} new jobs were successfully imported.`);
       onImportSuccess(); // Callback to refresh the job list
     } catch (err) { 
